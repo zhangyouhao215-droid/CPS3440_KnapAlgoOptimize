@@ -2,9 +2,8 @@ import random
 import time
 import sys
 
-# ==========================================
+
 # 1. Basic Class Definition (Item)
-# ==========================================
 class Item:
     def __init__(self, id, weight, value):
         self.id = id
@@ -14,10 +13,9 @@ class Item:
         self.ratio = value / weight if weight > 0 else 0
 
 
-# ==========================================
+
 # 2. Control Group: Brute Force Recursive
-# ==========================================
-# Purpose: Acts as the "Dumb Algorithm" for control to ensure correctness.
+# Acts as the "Dumb Algorithm" for control to ensure correctness.
 def knapsack_brute_force(weights, values, capacity, n):
     if n == 0 or capacity == 0:
         return 0
@@ -25,20 +23,20 @@ def knapsack_brute_force(weights, values, capacity, n):
     if weights[n - 1] > capacity:
         return knapsack_brute_force(weights, values, capacity, n - 1)
     else:
+        # two options: include n or not include n
         include = values[n - 1] + knapsack_brute_force(weights, values, capacity - weights[n - 1], n - 1)
         exclude = knapsack_brute_force(weights, values, capacity, n - 1)
         return max(include, exclude)
 
 
-# ==========================================
 # 3. Heuristic: Greedy Algorithm
-# ==========================================
-# Purpose: The "Heuristic Method" required by the project.
-# Logic: Prioritizes items with the highest "Value Density" (ratio).
-# Drawback: Fails to find the optimal solution on specific data (e.g., Strongly Correlated).
+# Prioritizes items with the highest "Value Density" (ratio).
+# But fails to find the optimal solution on specific data (eg: Strongly Correlated).
 def knapsack_greedy(weights, values, capacity):
     n = len(weights)
     items = []
+
+    #convert data into Item object(id,weight, value)
     for i in range(n):
         items.append(Item(i, weights[i], values[i]))
 
@@ -56,10 +54,9 @@ def knapsack_greedy(weights, values, capacity):
     return total_value
 
 
-# ==========================================
+
 # 4. Standard Solution: 2D Dynamic Programming
-# ==========================================
-# Purpose: The textbook standard solution. Used to compare memory consumption logic.
+# The textbook standard solution. Used to compare memory consumption logic.
 # Space Complexity: O(N * W) - High memory usage.
 def knapsack_dp_2d(weights, values, capacity):
     n = len(weights)
@@ -78,10 +75,9 @@ def knapsack_dp_2d(weights, values, capacity):
     return dp[n][capacity]
 
 
-# ==========================================
+
 # 5. Optimized Solution: 1D Dynamic Programming
-# ==========================================
-# Purpose: The "Modification to improve memory consumption" required by the project.
+# The "Modification to improve memory consumption" required by the project.
 # Space Complexity: O(W) - Significantly lower memory usage.
 def knapsack_dp_1d(weights, values, capacity):
     n = len(weights)
@@ -98,10 +94,9 @@ def knapsack_dp_1d(weights, values, capacity):
     return dp[capacity]
 
 
-# ==========================================
+
 # 6. Hard Instance Generator
-# ==========================================
-# Purpose: Generates different types of data to stress-test the algorithms.
+# Generates different types of data to stress-test the algorithms.
 # Research by Pisinger shows "Strongly Correlated" data breaks many heuristics.
 def generate_hard_instance(n, R=1000, type='uncorrelated'):
     weights = []
@@ -128,9 +123,8 @@ def generate_hard_instance(n, R=1000, type='uncorrelated'):
     return weights, values, capacity
 
 
-# ==========================================
+
 # 7. Experiment Runner
-# ==========================================
 def run_experiment():
     print(f"{'N':<5} | {'Type':<20} | {'Algo':<12} | {'Time(s)':<10} | {'Val':<8} | {'Gap %':<8}")
     print("-" * 80)
@@ -186,7 +180,7 @@ def run_experiment():
 
         print("-" * 80)
 
-    print("\n[Analysis Hints for Report]")
+    print("\nAnalysis Hints for Report")
     print("1. Compare DP-2D vs DP-1D: Note that while times are similar, memory usage theoretically drops from O(N*W) to O(W).")
     print("2. Compare Greedy vs Optimal: Observe how 'Gap %' increases significantly on 'Strongly Correlated' data.")
     print("3. This proves you found complex inputs that break the heuristic.")
