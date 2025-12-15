@@ -35,4 +35,4 @@ The primary goals of this project are:
 To run the comparative experiment and see the empirical results:
 
 ```bash
-python knapsack_final_english.py
+python Knap_Algo_Optimize_en.py
